@@ -1,0 +1,31 @@
+# Ignore the virtual environment
+venv/
+env/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore secrets and environment files
+.streamlit/secrets.toml
+.env
+
+# Ignore log files
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor config files
+.vscode/
+.idea/
+
+# Ignore compiled code
+*.so
+*.dll
+
+# Ignore Streamlit-generated files
+# Uncomment if Streamlit creates temporary cache files you don’t want
+# .streamlit/cache/
