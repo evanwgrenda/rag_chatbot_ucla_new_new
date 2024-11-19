@@ -8,7 +8,7 @@ from template import PROMPT_TEMPLATE
 # Google Sheets setup
 def setup_google_sheets():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope) # type: ignore
+    creds = ServiceAccountCredentials.from_json_keyfile_name("/Users/evangrenda/Desktop/rag_chatbot_ucla_new/credentials.json", scope) # type: ignore
     client = gspread.authorize(creds) # type: ignore
     sheet = client.open("UCLAChatlogs").sheet1  # Replace "UCLAChatlogs" with your sheet name
     return sheet

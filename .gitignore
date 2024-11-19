@@ -13,6 +13,15 @@ __pycache__/
 credentials.json
 test.py
 
+# Ignore Streamlit secrets file
+src/.streamlit/secrets.toml
+# Ignore Streamlit secrets file
+.streamlit/secrets.toml
+# Ignore sensitive Google credentials
+src/credentials.json
+# Ignore sensitive Google credentials
+src/credentials.json
+
 # Ignore log files
 *.log
 
