@@ -5,7 +5,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from template import PROMPT_TEMPLATE
 
-# Google Sheets setup
+# Google Sheets setup test
 def setup_google_sheets():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("/Users/evangrenda/Desktop/rag_chatbot_ucla_new/credentials.json", scope) # type: ignore
