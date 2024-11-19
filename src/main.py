@@ -1,9 +1,21 @@
 import streamlit as st
 from openai import OpenAI
 from datetime import datetime
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 from template import PROMPT_TEMPLATE
 
-# Get API key from Streamlit secrets
+# Google Sheets setup
+def setup_google_sheets():
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope) # type: ignore
+    client = gspread.authorize(creds) # type: ignore
+    sheet = client.open("UCLAChatlogs").sheet1  # Replace "UCLAChatlogs" with your sheet name
+    return sheet
+
+sheet = setup_google_sheets()
+
+# Get OpenAI API key from Streamlit secrets
 api_key = st.secrets["OPENAI_API_KEY"]
 
 # Instantiate OpenAI client
@@ -16,14 +28,18 @@ st.set_page_config(
     layout="wide"
 )
 
-# Initialize session state for message history
+# Initialize session state for chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Function to get chatbot response
+# Log interactions to Google Sheets
+def log_to_google_sheets(user_input, assistant_response):
+    timestamp = str(datetime.now())
+    sheet.append_row([timestamp, user_input, assistant_response])
+
+# Get chatbot response
 def get_chatbot_response(user_input):
     try:
-        # Create a chat completion request
         response = client.chat.completions.create(
             model="gpt-4",
             messages=[
@@ -33,7 +49,10 @@ def get_chatbot_response(user_input):
             temperature=0.7,
             max_tokens=500
         )
-        return response.choices[0].message.content
+        assistant_response = response.choices[0].message.content
+        # Log to Google Sheets
+        log_to_google_sheets(user_input, assistant_response)
+        return assistant_response
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -59,14 +78,14 @@ user_input = st.chat_input("Type your question here...")
 
 if user_input:
     with st.spinner('Getting response...'):
-        # Add user message to session state
+        # Add user input to session state
         st.session_state.messages.append({"role": "user", "content": user_input})
         
         # Get assistant response
         assistant_response = get_chatbot_response(user_input)
         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
 
-# Display message history
+# Display chat history
 for message in st.session_state.messages:
     role = message["role"]
     content = message["content"]

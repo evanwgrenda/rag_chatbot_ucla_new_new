@@ -10,6 +10,8 @@ __pycache__/
 # Ignore secrets and environment files
 .streamlit/secrets.toml
 .env
+credentials.json
+test.py
 
 # Ignore log files
 *.log
